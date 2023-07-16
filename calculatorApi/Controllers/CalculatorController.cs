@@ -22,7 +22,7 @@ public class CalculatorController : Controller {
 
 
 
-    [HttpPut]
+    [HttpPost]
     public async Task<IActionResult> PostValue([FromBody] CalcHistory calcHistory)
     {
         await _mongoDBService.CreateAsync(calcHistory);

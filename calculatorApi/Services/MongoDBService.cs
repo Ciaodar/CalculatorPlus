@@ -20,8 +20,9 @@ namespace calculatorApi.Services
         }
 
         public async Task CreateAsync(CalcHistory calcHistory) {
-            await _calcHistoryCollection.UpdateOneAsync(Builders<CalcHistory>.Filter.Eq(_ => _.Id, calcHistory.Id),
-                Builders<CalcHistory>.Update.SetOnInsert(_ => _.Id, calcHistory.Id).
+            string newId = calcHistory.Id == null ? ObjectId.GenerateNewId().ToString() : calcHistory.Id;
+            await _calcHistoryCollection.UpdateOneAsync(Builders<CalcHistory>.Filter.Eq(_ => _.Id, newId),
+                Builders<CalcHistory>.Update.SetOnInsert(_ => _.Id, newId).
                     //Set(_ => _.calculations, calcHistory.calculations),
                     Push("Calculations", calcHistory.calculations[0]),
                 new UpdateOptions() { IsUpsert = true });
