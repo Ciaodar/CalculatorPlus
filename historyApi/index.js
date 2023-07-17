@@ -4,6 +4,8 @@ const mongoose= require('mongoose');
 const Input=require('./models/inputschema');
 const router = require('./router/dbrouter');
 const bodyParser = require('body-parser');
+
+
 connectDB();
 
 
@@ -17,9 +19,7 @@ server.get('/',(req,res)=> {
     res.send('Bu API Bimser Yaz Staji için geliştirilmiştir.');
 } );
 
-server.get('/history',router)
-
-server.post('/history',router);
+server.get('/history',router);
 
 mongoose.connection.once('open', ()=>{
     console.log('Connected to MongoDB')

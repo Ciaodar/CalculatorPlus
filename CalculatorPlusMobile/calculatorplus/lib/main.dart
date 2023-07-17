@@ -46,7 +46,7 @@ class _CalcScreenState extends State<CalcScreen> {
       input = '';
       output = '';
     } else if( value =='H'){
-
+      
     } else if (value == '<') {
       if (input.isNotEmpty) {
         input = input.substring(0, input.length - 1);

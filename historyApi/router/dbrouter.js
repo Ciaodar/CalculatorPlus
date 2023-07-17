@@ -2,16 +2,12 @@ const express = require('express');
 const router = express.Router();
 const Input = require('../models/inputschema');
 
-router.use(async (req, res) => {
+router.get('/:id',async (req, res) => {
     try {
         var found
-        let id = req.body.id;
+        let id = req.query.id;
         console.log(id);
-        if (id !== undefined) {
-             found = await Input.findById(id).exec();
-        } else {
-             found = await Input.find().exec();
-        } 
+        found = await Input.findById(id).exec();
         console.log(found)
         res.send(found)
     } catch (error) {
