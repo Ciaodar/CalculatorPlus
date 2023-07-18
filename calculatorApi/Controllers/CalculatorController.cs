@@ -25,8 +25,10 @@ public class CalculatorController : Controller {
     [HttpPost]
     public async Task<IActionResult> PostValue([FromBody] CalcHistory calcHistory)
     {
-        await _mongoDBService.CreateAsync(calcHistory);
-        return Created(string.Empty, "Calculation was saved succesfully!");
+        /*await _mongoDBService.CreateAsync(calcHistory);
+        return Created(string.Empty, "Calculation was saved succesfully!");*/
+        //BURAYA RABBITMQ PRODUCER KODUMUZ GELECEK
+        return Ok();
     }
     /*public void ConfigureServices(IServiceCollection services)
     {
@@ -38,7 +40,7 @@ public class CalculatorController : Controller {
         services.AddStackExchangeRedisCache(OptionsBuilderConfigurationExtensions => options.Configuration = "localhost:6379");
         //services.AddMemoryCache();
         services.AddControllersWithViews();
-    }*/
+    }
 
     IDistributedCache _distributedCache;
 
@@ -66,7 +68,7 @@ public class CalculatorController : Controller {
        });
 
        return Ok(result);
-    }
+    }*/
     
 }
 
