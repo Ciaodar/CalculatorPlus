@@ -12,16 +12,23 @@
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.7" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
     <PackageReference Include="MongoDB.Driver" Version="2.20.0" />
+    <PackageReference Include="RabbitMQ.Client" Version="6.5.0" />
   </ItemGroup>
 
   <ItemGroup>
     <None Remove="CalculatorElements\" />
     <None Remove="Models\" />
     <None Remove="Services\" />
+    <None Remove="Services\RabbitMQProducer\" />
+    <None Remove="Services\DB\" />
+    <None Remove="Services\RabbitMQProducer\Helper\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="CalculatorElements\" />
     <Folder Include="Models\" />
     <Folder Include="Services\" />
+    <Folder Include="Services\RabbitMQProducer\" />
+    <Folder Include="Services\DB\" />
+    <Folder Include="Services\RabbitMQProducer\Helper\" />
   </ItemGroup>
 </Project>

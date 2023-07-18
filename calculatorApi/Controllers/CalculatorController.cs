@@ -26,7 +26,7 @@ public class CalculatorController : Controller {
     public async Task<IActionResult> PostValue([FromBody] CalcHistory calcHistory)
     {
         await _mongoDBService.CreateAsync(calcHistory);
-        return Created(string.Empty, calcHistory);
+        return Created(string.Empty, "Calculation was saved succesfully!");
     }
     /*public void ConfigureServices(IServiceCollection services)
     {
