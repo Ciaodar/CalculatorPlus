@@ -26,8 +26,8 @@ namespace mqolusturmaveyakalama
             channel.BasicPublish(string.Empty, "mesaj-kuyruk", null, body);
             Console.WriteLine("Hello, World!");
             Console.ReadLine();
-        }
-    
-        
-    }
-}
+         }
+     
+         
+} 
+     }
