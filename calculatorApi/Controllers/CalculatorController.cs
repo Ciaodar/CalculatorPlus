@@ -28,6 +28,45 @@ public class CalculatorController : Controller {
         await _mongoDBService.CreateAsync(calcHistory);
         return Created(string.Empty, calcHistory);
     }
+    /*public void ConfigureServices(IServiceCollection services)
+    {
+        services.AddStackExchangeRedisCache(OptionsBuilderConfigurationExtensions => options);
+        services.AddDistributedRedisCache(option=>{
+                    option.Configuration="127.0.0.1:6379";
+                    option.InstanceName="main";                    
+            });
+        services.AddStackExchangeRedisCache(OptionsBuilderConfigurationExtensions => options.Configuration = "localhost:6379");
+        //services.AddMemoryCache();
+        services.AddControllersWithViews();
+    }*/
+
+    IDistributedCache _distributedCache;
+
+
+    public CalculatorController(IDistributedCache distributedCache)
+    {
+        
+        _distributedCache = distributedCache;
+    } 
+
+    [HttpGet]
+    [Route("api/calculate/{index1}/{index2}")]
+    public IActionResult Calculate(int index1 , int index2)
+    {
+        var cacheKey = $"result_{index1}_{index2}"; 
+        var cachedResult = _distributedCache.GetString(cacheKey);
+        if(!string.IsNullOrEmpty(cachedResult)){
+            return Ok(cachedResult);
+        }
+
+        var result; //= ?Hesaplama metodu yazılıcak
+
+       _distributedCache.SetString(cacheKey, result , new DistributedCacheEntryOptions{
+        AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5)
+       });
+
+       return Ok(result);
+    }
     
 }
 
