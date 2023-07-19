@@ -1,3 +1,4 @@
 {
-    "cmake.sourceDirectory": "C:/Users/ACER/Desktop/calculatorApp-main/CalculatorPlusMobile/calculatorplus/windows"
+    "cmake.sourceDirectory": "C:/Users/ACER/Desktop/calculatorApp-main/CalculatorPlusMobile/calculatorplus/windows",
+    "dotnet.defaultSolution": "calculatorApi.sln"
 }
