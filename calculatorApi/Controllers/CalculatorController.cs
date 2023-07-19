@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Text.Json;
 using calculatorApi.Models;
 using calculatorApi.Services;
+using calculatorApi.Services.RabbitMQProducer.Helper;
 using Microsoft.AspNetCore.Mvc;
+using MongoDB.Bson.IO;
 
 namespace calculatorApi.Controllers;
 
@@ -28,6 +31,10 @@ public class CalculatorController : Controller {
         /*await _mongoDBService.CreateAsync(calcHistory);
         return Created(string.Empty, "Calculation was saved succesfully!");*/
         //BURAYA RABBITMQ PRODUCER KODUMUZ GELECEK
+
+        ProducerMQ pmq = new ProducerMQ();
+        string message = JsonSerializer.Serialize(calcHistory);
+        pmq.SendMessage(message);
         return Ok();
     }
 
