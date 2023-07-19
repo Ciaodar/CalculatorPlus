@@ -2,7 +2,7 @@
 using calculatorApi.Models;
 using calculatorApi.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Caching.Distributed;
+
 namespace calculatorApi.Controllers;
 
 [ApiController]
@@ -20,11 +20,15 @@ public class CalculatorController : Controller {
         return await _mongoDBService.GetAsync();
     }
 
+
+
     [HttpPost]
     public async Task<IActionResult> PostValue([FromBody] CalcHistory calcHistory)
     {
-        await _mongoDBService.CreateAsync(calcHistory);
-        return Created(string.Empty, calcHistory);
+        /*await _mongoDBService.CreateAsync(calcHistory);
+        return Created(string.Empty, "Calculation was saved succesfully!");*/
+        //BURAYA RABBITMQ PRODUCER KODUMUZ GELECEK
+        return Ok();
     }
 
 }

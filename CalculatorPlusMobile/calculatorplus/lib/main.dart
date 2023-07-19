@@ -1,4 +1,7 @@
+import 'package:calculatorplus/calculation.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert' as convert;
 
 void main() {
   runApp(const MyApp());
@@ -31,24 +34,76 @@ class _CalcScreenState extends State<CalcScreen> {
   //Variables
   double? firstnumber;
   double? secondnumber;
+  String? id;
   var input = '';
   var output = '';
   var operation = '';
   var hideInput = false;
   var outputSize = 34.0;
 
+  historyCheck(String? id)async{
+    if(id!=null){
+      final url=Uri.http('https://king-prawn-app-y7gi7.ondigitalocean.app/history?id=$id');
+      var response = await http.get(url);
+      if(response.statusCode==200) {
+        var calcs=convert.jsonDecode(response.body) as Map<String, dynamic>;
+        List<Calculation> calcslist=[];
+        try {
+          calcs.forEach((key, value) {
+            if (key=='Calculations') {
+              value.forEach((k,v){
+                double? inp1;
+                double? inp2;
+                String? operation;
+                double? res;
+                v.forEach((k2,v2){
+                  if(k2=='input1'){
+                    inp1=v2;
+                  }
+                  else if(k2=='input2'){
+                    inp2=v2;
+                  }
+                  else if(k2=='signOperation'){
+                    operation=v2;
+                  }
+                  else if(k2=='result'){
+                    res=v2;
+                  }
+                });
+                if(inp1!=null){
+                  calcslist.add(Calculation(inp1!, inp2!, operation!, res!));
+                }
+              });
+            }
+          });
+        } on Exception catch (e) {
+          print(e);
+        }
+      }
+      else{
+        print('Error getting history with code:${response.statusCode}');
+      }
+    }
+    else{
+
+    }
+
+
+
+  }
+
 
 
 
   onButtonClick(value) {
-    //if value is AC
     if (value == 'AC') {
       input = '';
       output = '';
     } else if( value =='H'){
-      
+
     } else if (value == '<') {
       if (input.isNotEmpty) {
+
         input = input.substring(0, input.length - 1);
       }
     }
@@ -57,15 +112,6 @@ class _CalcScreenState extends State<CalcScreen> {
         var userInput = input;
         userInput = input.replaceAll('X', '*');
 
-
-        //Parser p = Parser();
-        //Expression expression = p.parse(userInput);
-       // ContextModel cm = ContextModel();
-       // var finalValue = expression.evaluate(EvaluationType.REAL, cm);
-        //output = finalValue.toString();
-
-
-
         if (output.endsWith(".0")) {
           output = output.substring(0, output.length - 2);
         }
@@ -73,7 +119,10 @@ class _CalcScreenState extends State<CalcScreen> {
         hideInput = true;
         outputSize = 52.0;
       }
-    } else {
+    }else if (value == 'X' || value == '/' || value == '-' || value == '+' ) {
+
+    }
+    else {
       input = input + value;
       hideInput = false;
       outputSize = 34.0;

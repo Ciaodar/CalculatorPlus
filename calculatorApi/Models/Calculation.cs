@@ -7,5 +7,6 @@
         public int result { get; set; }
         public string signOperation { get; set; }
     }
+
 }
 

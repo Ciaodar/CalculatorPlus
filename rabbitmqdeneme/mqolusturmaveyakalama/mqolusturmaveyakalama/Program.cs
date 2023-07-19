@@ -7,7 +7,14 @@ namespace mqolusturmaveyakalama
 {
     internal class Program
     {
-        static void Main(string[] args)
+        public static void Main()
+        {
+            for (int i = 0; i<10;i++)
+            {
+                Mesaj();
+            }
+        }
+        static void Mesaj()
         {
             var factory = new ConnectionFactory();
             factory.Uri = new Uri("amqps://ejejtxro:zt5zcNLY1EsDdMdKQ_KsIh9Q5AT3R7Fu@jackal.rmq.cloudamqp.com/ejejtxro");
@@ -19,8 +26,8 @@ namespace mqolusturmaveyakalama
             channel.BasicPublish(string.Empty, "mesaj-kuyruk", null, body);
             Console.WriteLine("Hello, World!");
             Console.ReadLine();
-        }
-    
-        
-    }
-}
+         }
+     
+         
+} 
+     }

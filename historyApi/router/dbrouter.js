@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const Input = require('../models/inputschema');
 
-
 router.get('/:id',async (req, res) => {
     try {
         var found
