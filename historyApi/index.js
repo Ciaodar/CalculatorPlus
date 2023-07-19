@@ -1,5 +1,5 @@
 const express=require('express');
-const connectDB=require('./dbcon');
+const connectDB=require('./db/dbCon');
 require('./services/ConsumerMQ');
 
 const mongoose= require('mongoose');
