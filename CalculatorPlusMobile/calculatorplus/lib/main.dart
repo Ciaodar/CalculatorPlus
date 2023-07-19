@@ -11,9 +11,6 @@ const buttonColor = Color(0xff191919);
 const orangecolor = Color(0xffD9802E);
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
-
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
@@ -41,7 +38,7 @@ class _CalcScreenState extends State<CalcScreen> {
   var hideInput = false;
   var outputSize = 34.0;
 
-  historyCheck(String? id)async{
+  historyCheck()async{
     if(id!=null){
       final url=Uri.http('https://king-prawn-app-y7gi7.ondigitalocean.app/history?id=$id');
       var response = await http.get(url);
@@ -81,26 +78,45 @@ class _CalcScreenState extends State<CalcScreen> {
         }
       }
       else{
-        print('Error getting history with code:${response.statusCode}');
+        print('Error receiving history. Error code: ${response.statusCode}');
       }
     }
     else{
-
+      //endpoint to get id
     }
-
-
-
   }
 
-
+  sendToDotNet(double firn,double secn, String op)async{
+    final doturl=Uri.http('https://calculatornetnode.azurewebsites.net/api/Calculator');
+    if (id!=null) {
+      Map<String,dynamic> body=
+      {
+        'input1':firn,
+        'input2':secn,
+        'signOperation':op,
+      };
+      final response= await http.post(doturl,body:convert.jsonEncode(body));
+      if(response.statusCode==200){
+        print('Calculation request succesfully sent');
+      }else{
+        print('Calculation request failed. Error code:${response.statusCode}');
+      }
+    }
+    else { //if(id==null)
+      //endpoint to get id
+    }
+  }
 
 
   onButtonClick(value) {
     if (value == 'AC') {
+      firstnumber=null;
+      secondnumber=null;
+      operation='';
       input = '';
       output = '';
     } else if( value =='H'){
-
+      historyCheck();
     } else if (value == '<') {
       if (input.isNotEmpty) {
 
@@ -109,8 +125,13 @@ class _CalcScreenState extends State<CalcScreen> {
     }
     else if (value == '=') {
       if (input.isNotEmpty) {
-        var userInput = input;
-        userInput = input.replaceAll('X', '*');
+        List<String> parts = input.split(" "); // Split the string by space
+
+        firstnumber = double.parse(parts[0]); // Convert the first part to a double
+        operation = parts[1]; // Get the operation as a String
+        secondnumber = double.parse(parts[2]); // Convert the second part to a double
+
+        //sendToDotNet(firstnumber!,secondnumber!,operation);
 
         if (output.endsWith(".0")) {
           output = output.substring(0, output.length - 2);
@@ -119,15 +140,28 @@ class _CalcScreenState extends State<CalcScreen> {
         hideInput = true;
         outputSize = 52.0;
       }
-    }else if (value == 'X' || value == '/' || value == '-' || value == '+' ) {
-
+    }else if ( value == '*' || value == '/' || value == '-' || value == '+') {
+      if(input==''||input.substring(input.length) == '*' || input.substring(input.length) == '/' || input.substring(input.length) == '-' || input.substring(input.length) == '+'){
+        return;
+      }
+      else {
+        if(!(input.contains('+')||input.contains('-')||input.contains('*')||input.contains('/'))) {
+          firstnumber = double.parse(input);
+          operation = value;
+          input = '$input $value ';
+          hideInput = false;
+          outputSize = 34.0;
+        }
+        else{
+          //when user try to add more operators into input.
+        }
+      }
     }
     else {
       input = input + value;
       hideInput = false;
       outputSize = 34.0;
     }
-
     setState(() {});
   }
 
@@ -198,7 +232,7 @@ class _CalcScreenState extends State<CalcScreen> {
             button(text: '8'),
             button(text: '9'),
             button(
-                text: 'X', tColor: orangecolor, buttonBGcolor: operatorcolor),
+                text: '*', tColor: orangecolor, buttonBGcolor: operatorcolor),
           ]),
           Row(children: [
             button(text: '4'),
