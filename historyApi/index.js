@@ -1,9 +1,9 @@
 const express=require('express');
 const connectDB=require('./dbcon');
+require('./services/ConsumerMQ');
+
 const mongoose= require('mongoose');
-const Input=require('./models/inputschema');
 const dbrouter = require('./router/dbrouter');
-const bodyParser = require('body-parser');
 const cacherouter = require('./router/redisrouter')
 
 connectDB();
@@ -11,8 +11,8 @@ connectDB();
 
 
 const server= express();
-server.use(bodyParser.json())
-server.use(bodyParser.urlencoded({ extended: true }))
+server.use(express.json())
+server.use(express.urlencoded({ extended: true }))
 
 
 server.get('/',(req,res)=> {
