@@ -11,7 +11,7 @@ namespace calculatorApi.Models
         public string? Id { get; set; }
 
         [BsonElement("Calculations")]
-        public List<Calculation> calculations { get; set; }
+        public required List<Calculation> Calculations { get; set; }
     }
 }
 
