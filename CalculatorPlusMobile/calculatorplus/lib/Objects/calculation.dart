@@ -5,3 +5,4 @@ class Calculation {
   final double result;
   Calculation(this.input1, this.input2, this.operation, this.result);
 }
+List<Calculation> calcslist=[];
