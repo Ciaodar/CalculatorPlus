@@ -3,8 +3,8 @@ const MakeCalculationAndSend = (message)=>{
     const json = JSON.parse(message);
     const data = json.Calculation[0];
     let result;
-
-    switch(data.signOperation){
+    console.log(data.signOperation);
+    /*switch(data.signOperation){
         case '+':
             result = data.input1 + data.input2;
             break;
@@ -29,7 +29,7 @@ const MakeCalculationAndSend = (message)=>{
         }]
     }
     dbSave(resultValue).then(e=>console.log(e)).catch(e=>console.log(e));
-    //socket
+    //socket*/
 }
 
 module.exports = MakeCalculationAndSend;
