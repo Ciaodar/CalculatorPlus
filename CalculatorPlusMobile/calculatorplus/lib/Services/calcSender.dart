@@ -2,14 +2,14 @@ import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 
 
-sendToDotNet(double firn,double secn, String op,String? id)async{
-  final doturl=Uri.http('https://calculatornetnode.azurewebsites.net/api/Calculator');
-  if (id!=null) {
+sendToDotNet(double firn,double secn, String op,String id,String name)async{
+  final doturl=Uri.http('localhost:5254');
+  try {
     Map<String,dynamic> body=
     {
-      //'username':name,
+      'username':name,
       'userId':id,
-      'calculations':
+      'Calculations':
       [{
         'input1':firn,
         'input2':secn,
@@ -22,8 +22,7 @@ sendToDotNet(double firn,double secn, String op,String? id)async{
     }else{
       print('Calculation request failed. Error code:${response.statusCode}');
     }
-  }
-  else { //if(id==null)
-    print('No id given, please provide some userID');
+  } on Exception catch (e) {
+    print(e);
   }
 }
