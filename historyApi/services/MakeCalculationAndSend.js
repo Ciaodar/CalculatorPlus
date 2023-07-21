@@ -3,7 +3,7 @@ const MakeCalculationAndSend = (message)=>{
     const json = JSON.parse(message);
     const data = json.Calculation[0];
     let result;
-    console.log(data.signOperation);
+    console.log(data);
     /*switch(data.signOperation){
         case '+':
             result = data.input1 + data.input2;
