@@ -8,8 +8,8 @@ namespace calculatorApi.Models
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string? Id { get; set; }
-
+        public string? userId { get; set; }
+        public string username { get; set; }
         [BsonElement("Calculations")]
         public required List<Calculation> Calculations { get; set; }
     }

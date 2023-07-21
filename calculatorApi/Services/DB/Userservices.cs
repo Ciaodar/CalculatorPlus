@@ -1,4 +1,4 @@
-using System.Threading.Tasks;
+/*using System.Threading.Tasks;
 using calculatorApi.Models;
 using Microsoft.Extensions.Options;
 using Npgsql;
@@ -43,4 +43,4 @@ namespace calculatorApi.Services
             }
         }
     }
-}
+}*/
