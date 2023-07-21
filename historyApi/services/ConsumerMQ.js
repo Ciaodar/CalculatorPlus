@@ -14,7 +14,7 @@ async function consumeMessages() {
     channel.consume(queue, (msg) => {
       const message = msg.content.toString();
       console.log('Alınan mesaj:', message);
-      MakeCalculationAndSend(message);//Mesaj işlenip cevap hazırlanıyor
+      //MakeCalculationAndSend(message);//Mesaj işlenip cevap hazırlanıyor
       channel.ack(msg); // Mesajı işlendi olarak işaretleme
     });
   } catch (error) {

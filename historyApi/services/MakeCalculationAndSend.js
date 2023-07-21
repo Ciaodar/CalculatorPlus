@@ -28,7 +28,7 @@ const MakeCalculationAndSend = (message)=>{
             result : result
         }]
     }
-    dbSave(resultValue).then().catch(e=>console.log(e));
+    dbSave(resultValue).then(e=>console.log(e)).catch(e=>console.log(e));
     //socket
 }
 
