@@ -1,17 +1,31 @@
+import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
+
 import '../Objects/calculation.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 
-historyCheck(String? id)async{
+import '../Providers/User.dart';
+
+historyCheck(String? id,BuildContext context)async{
   if(id!=null){
-    final url=Uri.http('https://king-prawn-app-y7gi7.ondigitalocean.app/history?id=$id');
+    print(id);
+    final url=Uri.parse('http://localhost:5000/history?id=996f8840-27a3-11ee-8088-a7e0762d97a1');
     var response = await http.get(url);
     if(response.statusCode==200) {
       var calcs=convert.jsonDecode(response.body) as Map<String, dynamic>;
+      print(calcs.toString());
       try {
         calcs.forEach((key, value) {
-          if (key=='Calculations') {
-            calcslist=[];
+          String? name, id;
+          if(key=='username'){
+            name=value;
+          }
+          else if(key=='userId'){
+            id=value;
+          }
+          else if (key=='Calculations') {
+            context.read<User>().historylist=[];
             value.forEach((k,v){
               double? inp1;
               double? inp2;
@@ -32,13 +46,18 @@ historyCheck(String? id)async{
                 }
               });
               if(inp1!=null){
-                calcslist.add(Calculation(inp1!, inp2!, operation!, res!));
+                try {
+                  context.read<User>().historylist.add(Calculation(inp1!, inp2!, operation!, res!,name!,id!));
+                } on Exception catch (e) {
+                  print('Exception while adding to list: $e');
+                }
               }
             });
           }
         });
-      } on Exception catch (e) {
-        print(e);
+      }
+      on Exception catch (e) {
+        print('BU error olu $e');
       }
     }
     else{
