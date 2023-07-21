@@ -1,6 +1,6 @@
 const express=require('express');
 const connectDB=require('./db/dbCon');
-require('./services/ConsumerMQ');
+const consumer = require('./services/ConsumerMQ');
 
 const mongoose= require('mongoose');
 const dbrouter = require('./router/dbrouter');
@@ -29,3 +29,5 @@ mongoose.connection.once('open', ()=>{
         console.log('Server running on: http://localhost:5000')
     });
 });
+
+consumer();
