@@ -31,6 +31,7 @@ const updateCache = async (id) => {
   }
 };
 
+
 async function getDataFromCache(id) {
   const cacheKey = `input_${id}`;
   try {
@@ -58,6 +59,27 @@ async function getDataFromCache(id) {
   }
 }
 
+const invalidateCache = async (id) => {
+  const cacheKey = 'input_${id}';
+  try{
+    redisClient.del(cacheKey , (err , reply) => {
+      if(err) {
+        console.error(err);
+      } else {
+        console.log('Önbellekten veri silindi. ${cacheKey}');
+      }
+    });
+  }
+  catch (error) {
+    console.error(error);
+    throw new Error("Sunucu Hatasi");
+  }
+};
+
 
 
 module.exports = getDataFromCache;
+
+
+
+
