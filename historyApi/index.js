@@ -1,33 +1,28 @@
 const express=require('express');
-const connectDB=require('./db/dbCon');
+const http = require('http');
+const webSocket = require('ws');
+require('./db/dbCon');
 const consumer = require('./services/ConsumerMQ');
-
 const mongoose= require('mongoose');
 const dbrouter = require('./router/dbrouter');
-const cacherouter = require('./router/redisrouter')
+const cacherouter = require('./router/redisrouter');
+const Socket = require('./services/Socket');
 
-connectDB();
+const app = express();
 
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
 
+const server= http.createServer(app);
+server.listen(3000,()=>console.log('Server is running succesfully...'));
+const wss = new webSocket.Server({server:server});
 
-const server= express();
-server.use(express.json())
-server.use(express.urlencoded({ extended: true }))
-
-
-server.get('/',(req,res)=> {
+app.get('/',(req,res)=> {
     res.send('Bu API Bimser Yaz Staji için geliştirilmiştir.');
 } );
 
-server.get('/history',dbrouter);
-
-server.get('/cache',cacherouter);
-
-mongoose.connection.once('open', ()=>{
-    console.log('Connected to MongoDB')
-    server.listen(5000, () =>{
-        console.log('Server running on: http://localhost:5000')
-    });
-});
+app.get('/history',dbrouter);
+app.get('/cache',cacherouter);
 
 consumer();
+Socket.SocketServer(wss);
