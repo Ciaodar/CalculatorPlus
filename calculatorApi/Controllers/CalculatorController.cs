@@ -8,13 +8,6 @@ namespace calculatorApi.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 public class CalculatorController : Controller {
-
-    //private readonly ProducerMQ _producerMQ;
-
-   /* public CalculatorController(ProducerMQ producerMQ) {
-        _producerMQ = producerMQ;
-    }*/
-
     [HttpPost]
     public async Task<IActionResult> PostValue([FromBody] CalcHistory calcHistory)
     {
