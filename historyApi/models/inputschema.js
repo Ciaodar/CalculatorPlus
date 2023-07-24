@@ -2,6 +2,7 @@ const mongoose= require('mongoose');
 const schema=mongoose.Schema;
 
 const inputschema=new schema({
+    userId:String,
     Calculations:[{
         input1:{type: Number,requried:true},
         input2:{type: Number,requried:true},

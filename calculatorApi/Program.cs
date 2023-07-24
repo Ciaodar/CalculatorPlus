@@ -3,9 +3,6 @@ using calculatorApi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.Configure<MongoDbSettings>(builder.Configuration.GetSection("MongoDB"));
-builder.Services.AddSingleton<MongoDBService>();
-
 // Add services to the container.
 
 builder.Services.AddControllers();

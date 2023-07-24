@@ -1,9 +1,9 @@
 const dbSave = require('../db/dbSave');
+const Socket = require('../services/Socket');
 const MakeCalculationAndSend = (message)=>{
     const json = JSON.parse(message);
-    const data = json.Calculation[0];
+    const data = json.Calculations[0];
     let result;
-
     switch(data.signOperation){
         case '+':
             result = data.input1 + data.input2;
@@ -22,14 +22,17 @@ const MakeCalculationAndSend = (message)=>{
     }
     const resultValue = {
         userId : json.userId,
-        Calculation: [{
+        Calculations: [{
             input1 : data.input1,
             input2 : data.input2,
-            result : result
+            result : result,
+            signOperation:data.signOperation
         }]
     }
-    dbSave(resultValue).then().catch(e=>console.log(e));
-    //socket
+    dbSave(resultValue).then(e=>console.log(e)).catch(e=>console.log(e));
+    const resultValueStr = JSON.stringify(resultValue);
+    Socket.sendCalculationAll(resultValueStr);
+    
 }
 
 module.exports = MakeCalculationAndSend;

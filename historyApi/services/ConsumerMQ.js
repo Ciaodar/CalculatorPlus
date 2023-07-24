@@ -9,13 +9,13 @@ async function consumeMessages() {
     const queue = 'CalculationQueue'; // Tüketilecek kuyruk adı
     await channel.assertQueue(queue, { durable: false });
 
-    console.log('Consumer başlatıldı. Mesajları bekleniyor...');
+    console.log('Consumer is being started. Waiting for messages...');
 
     channel.consume(queue, (msg) => {
       const message = msg.content.toString();
       console.log('Alınan mesaj:', message);
-      MakeCalculationAndSend(message);//Mesaj işlenip cevap hazırlanıyor
       channel.ack(msg); // Mesajı işlendi olarak işaretleme
+      MakeCalculationAndSend(message);//Mesaj işlenip cevap hazırlanıyor
     });
   } catch (error) {
     console.error('Hata:', error);

@@ -1,4 +1,4 @@
-using System.Threading.Tasks;
+/*using System.Threading.Tasks;
 using calculatorApi.Models;
 using Microsoft.Extensions.Options;
 using Npgsql;
@@ -24,10 +24,10 @@ namespace calculatorApi.Services
                 {
                     cmd.Connection = connection;
 
-                    cmd.CommandText = "INSERT INTO users (username, email, password) VALUES (@username, @email, @password)";
+                    cmd.CommandText = "INSERT INTO users (username, UserId) VALUES (@username, @UserId)";
                     cmd.Parameters.AddWithValue("username", user.Username);
-                    cmd.Parameters.AddWithValue("email", user.Email);
-                    cmd.Parameters.AddWithValue("password", user.Password);
+                    cmd.Parameters.AddWithValue("UserId", user.UserId);
+                 
 
                     try
                     {
@@ -43,4 +43,4 @@ namespace calculatorApi.Services
             }
         }
     }
-}
+}*/
