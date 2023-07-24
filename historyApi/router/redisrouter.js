@@ -2,9 +2,9 @@ const redist=require('../services/cacheredis');
 const express=require('express');
 const router=express.Router();
 
-router.get('/:id',async(req,res) => {
+router.get('/',async(req,res) => {
     console.log('Geldi')
-    const response = await redist(req.params.id);
+    const response = await redist(req.query.id);
     res.json(response)
 });
 
