@@ -21,7 +21,7 @@ app.get('/',(req,res)=> {
     res.send('Bu API Bimser Yaz Staji için geliştirilmiştir.');
 } );
 
-app.use('/history',dbrouter);
+app.use('/api',dbrouter);
 app.use('/api',redisrouter);
 
 consumer();

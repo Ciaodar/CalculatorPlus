@@ -1,19 +1,16 @@
 const redis = require('redis');
-const redisClient = redis.createClient();
+
+const redisClient = redis.createClient(6379);
 const Input = require('../models/inputschema');
-
-
 
 const updateCache = async (id) => {
   const cacheKey = `input_${id}`;
   try {
-    const found = await Input.findById(id).exec();
+    const found = await Input.find({userId:id});
     if (!found) {
       return "Veri bulunamadı";
     }
-
     const foundJson = JSON.stringify(found);
-
     redisClient.multi()    // Son 20 veriyi önbellekte saklar.
       .lpush('recentData', cacheKey)
       .ltrim('recentData', 0, 19)
@@ -23,42 +20,36 @@ const updateCache = async (id) => {
           console.error(err);
         }
       });
-
     return (found);
-  } catch (error) {
-    console.error("hata "+error);
-    return 'Sunucu Hatası';
+
+  }catch (error) {
+    return `Sunucu hatası ${error}`;
   }
 };
 
-
 async function getDataFromCache(id) {
   const cacheKey = `input_${id}`;
-  
   try {
-    const cachedData = await redisClient.get(cacheKey);
-    /*new Promise((resolve, reject) => {
-      redisClient.get(cacheKey, (err, data) => {
-        if (err) {
-          console.error("hata2 "+err);
-          reject(err);
-        }
+    const cachedData = await new Promise((resolve, reject) => {
+    redisClient.get(cacheKey, (err, data) => {
+      if (err) reject(err);
         resolve(data);
       });
-    });*/
-        if (cachedData) {
-          return JSON.parse(cachedData);
-        }else {
-          const torouter = await updateCache(id);
-          return torouter; // veya başka bir değer döndürebilirsiniz
-        }
-    }catch (error) {
-      console.log("hata3 "+error);
-    }
+     });
+      if (cachedData !== null) {
+       console.log("Data found in cache:", cachedData);
+       return cachedData;
+      }else {
+        const cachingData = await updateCache(id);
+        return cachingData;
+      }
+  }catch (error) {
+    console.log("Hata: "+error);
+  }
 }
 
 const invalidateCache = async (id) => {
-  const cacheKey = 'input_${id}';
+  const cacheKey = `input_${id}`;
   try{
     redisClient.del(cacheKey , (err , reply) => {
       if(err) {
@@ -69,11 +60,9 @@ const invalidateCache = async (id) => {
     });
   }
   catch (error) {
-    console.error("hata5 "+error);
+    console.error("Hata: "+error);
   }
 };
-
-
 
 module.exports = getDataFromCache;
 

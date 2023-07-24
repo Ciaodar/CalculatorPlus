@@ -3,8 +3,7 @@ const router = express.Router();
 
 const redist=require('../services/cacheredis');
 
-router.get('/ca', async(req,res) => {
-    console.log('Geldi')
+router.get('/cache', async(req,res) => {
     const id = req.query.id;
     const response = await redist(id);
     res.json(response);

@@ -11,7 +11,7 @@ const MakeCalculationAndSend = (message)=>{
         case '-':
             result = data.input1 - data.input2;
             break;
-        case 'x':
+        case '*':
             result = data.input1 * data.input2;
             break;
         case '/':
@@ -29,9 +29,19 @@ const MakeCalculationAndSend = (message)=>{
             signOperation:data.signOperation
         }]
     }
+    const socketResult ={
+        userId : json.userId,
+        username : json.username,
+        Calculations: [{
+            input1 : data.input1,
+            input2 : data.input2,
+            result : result,
+            signOperation:data.signOperation
+        }]
+    }
     dbSave(resultValue).then(e=>console.log(e)).catch(e=>console.log(e));
-    const resultValueStr = JSON.stringify(resultValue);
-    Socket.sendCalculationAll(resultValueStr);
+    const socketResultStr = JSON.stringify(socketResult);
+    Socket.sendCalculationAll(socketResultStr);
     
 }
 
