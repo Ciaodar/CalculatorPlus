@@ -4,7 +4,7 @@ const router=express.Router();
 
 router.get('/:id',async(req,res) => {
     console.log('Geldi')
-    const response = await redist(req.query.id);
+    const response = await redist(req.params.id);
     res.json(response)
 });
 
