@@ -26,7 +26,7 @@ const updateCache = async (id) => {
 
     return (found);
   } catch (error) {
-    console.error(error);
+    console.error("hata "+error);
     return 'Sunucu Hatası';
   }
 };
@@ -34,29 +34,27 @@ const updateCache = async (id) => {
 
 async function getDataFromCache(id) {
   const cacheKey = `input_${id}`;
+  
   try {
-    const cachedData = await new Promise((resolve, reject) => {
+    const cachedData = await redisClient.get(cacheKey);
+    /*new Promise((resolve, reject) => {
       redisClient.get(cacheKey, (err, data) => {
         if (err) {
-          console.error(err);
+          console.error("hata2 "+err);
           reject(err);
         }
         resolve(data);
       });
-    });
-
-
-
-   if (cachedData) {
-      return JSON.parse(cachedData);
-    } else {
-      const torouter = await updateCache(id);
-      return torouter; // veya başka bir değer döndürebilirsiniz
+    });*/
+        if (cachedData) {
+          return JSON.parse(cachedData);
+        }else {
+          const torouter = await updateCache(id);
+          return torouter; // veya başka bir değer döndürebilirsiniz
+        }
+    }catch (error) {
+      console.log("hata3 "+error);
     }
-  } catch (error) {
-    console.error(error);
-    throw new Error("Sunucu Hatasi");
-  }
 }
 
 const invalidateCache = async (id) => {
@@ -64,15 +62,14 @@ const invalidateCache = async (id) => {
   try{
     redisClient.del(cacheKey , (err , reply) => {
       if(err) {
-        console.error(err);
+        console.error("hata4 "+err);
       } else {
         console.log('Önbellekten veri silindi. ${cacheKey}');
       }
     });
   }
   catch (error) {
-    console.error(error);
-    throw new Error("Sunucu Hatasi");
+    console.error("hata5 "+error);
   }
 };
 

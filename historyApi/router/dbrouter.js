@@ -11,6 +11,7 @@ router.get('/:id',async (req, res) => {
         console.log(found)
         res.send(found)
     } catch (error) {
+        res.json("bulunamadı");
         console.error(error)
     }
 });

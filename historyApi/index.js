@@ -3,9 +3,9 @@ const http = require('http');
 const webSocket = require('ws');
 require('./db/dbCon');
 const consumer = require('./services/ConsumerMQ');
-const mongoose= require('mongoose');
+
 const dbrouter = require('./router/dbrouter');
-const cacherouter = require('./router/redisrouter');
+const redisrouter = require('./router/redisRouter');
 const Socket = require('./services/Socket');
 
 const app = express();
@@ -21,8 +21,8 @@ app.get('/',(req,res)=> {
     res.send('Bu API Bimser Yaz Staji için geliştirilmiştir.');
 } );
 
-app.get('/history',dbrouter);
-app.get('/cache',cacherouter);
+app.use('/history',dbrouter);
+app.use('/api',redisrouter);
 
 consumer();
 Socket.SocketServer(wss);

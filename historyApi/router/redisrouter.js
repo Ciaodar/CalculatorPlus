@@ -1,11 +1,13 @@
-const redist=require('../services/cacheredis');
-const express=require('express');
-const router=express.Router();
+const express = require('express');
+const router = express.Router();
 
-router.get('/api',async(req,res) => {
+const redist=require('../services/cacheredis');
+
+router.get('/ca', async(req,res) => {
     console.log('Geldi')
-    const response = await redist(req.query.id);
-    res.json(response)
+    const id = req.query.id;
+    const response = await redist(id);
+    res.json(response);
 });
 
 module.exports=router;
