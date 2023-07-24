@@ -6,7 +6,7 @@ import '../Providers/User.dart';
 
 
 checkSign(BuildContext context)async{
-  final storage = const FlutterSecureStorage();
+  const storage = FlutterSecureStorage();
   Map<String,String> value = await storage.readAll();
   String? name;
   String? id;
@@ -20,5 +20,8 @@ checkSign(BuildContext context)async{
       check=(value=='true');
     }
   });
+  if(id==null || name == null){
+    Navigator.of(context).pushNamed('/sign');
+  }
   context.read<User>().updateUserInfo(uid: id,checkedIn: check,name: name);
 }

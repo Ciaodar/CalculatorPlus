@@ -7,7 +7,6 @@ import 'package:calculatorplus/colors.dart';
 import '../Providers/User.dart';
 class FirstScreen extends StatelessWidget {
   const FirstScreen({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     final namecontroller= TextEditingController();
@@ -76,12 +75,11 @@ class FirstScreen extends StatelessWidget {
                     backgroundColor: buttonColor,
                   ),
                 onPressed: (){
-                  print('AHH basma');
                   final id = const Uuid().v1();
                   final user = context.read<User>();
                   user.updateUserInfo(uid: id,name: namecontroller.text,checkedIn: true);
                   setStorage(user);
-                  Navigator.of(context).pushReplacementNamed('/calc');
+                  Navigator.of(context).pop();
                 }, child: const Text(
                 'K',
                 style: TextStyle(

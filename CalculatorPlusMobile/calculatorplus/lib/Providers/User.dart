@@ -9,17 +9,14 @@ class User with ChangeNotifier {
   String? _name;
   bool _checkedIn=false;
   List<Calculation> historylist=[
-    Calculation(10, 20, '+', 30,'Metehan','dskygfjsdbhvıusd'),
-    Calculation(45, 20, '+', 65,'Metehan','dskygfjsdbhvıusd'),
-    Calculation(23, 20, '+', 43,'Metehan','dskygfjsdbhvıusd'),
-    Calculation(15, 20, '+', 35,'Metehan','dskygfjsdbhvıusd'),
-    Calculation(76, 20, '+', 96,'Metehan','dskygfjsdbhvıusd'),
+    Calculation('Metehan','dskygfjsdbhvıusd',10, 20, '+', 30,),
+    Calculation('Metehan','dskygfjsdbhvıusd',45, 20, '+', 65),
   ];
 
   List<Calculation> chatlist=[
-    Calculation(10, 20, '+', 30,'Metehan','dskygfjsdbhvıusd'),
-    Calculation(20, 5, '*', 100,'Burhan','buabsoljafbkbasd'),
-    Calculation(50, 5, '/', 10,'Serdar','badhfasfkgvasfa'),
+    Calculation('Metehan','dskygfjsdbhvıusd',10, 20, '+', 30),
+    Calculation('Burhan','buabsoljafbkbasd',20, 5, '*', 100),
+    Calculation('Serdar','badhfasfkgvasfa',50, 5, '/', 10),
   ];
 
 

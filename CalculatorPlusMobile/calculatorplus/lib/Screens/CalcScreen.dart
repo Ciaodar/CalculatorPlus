@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../Providers/User.dart';
 import '../Services/historyChecker.dart';
 import '../Services/calcSender.dart';
+import '../Storage/checkSign.dart';
 
 class CalcScreen extends StatefulWidget {
   const CalcScreen({Key? key}) : super(key: key);
@@ -23,7 +24,14 @@ class _CalcScreenState extends State<CalcScreen> {
   var outputSize = 34.0;
 
   @override
+  void initState() {
+    checkSign(context);
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+
     onButtonClick(value) {
       final user = context.read<User>();
       if (value == 'AC') {
@@ -153,7 +161,18 @@ class _CalcScreenState extends State<CalcScreen> {
               ),
               child: Column(
                 children: [
-                  Text(""),
+                  Container(
+                    alignment: Alignment.center,
+                    margin: EdgeInsets.symmetric(horizontal: 20,vertical: 50),
+                      child: Text(
+                          "History:",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: orangecolor,
+                          fontSize: 56,
+                        ),
+                      )
+                  ),
                   Container(
                     child: ListView.builder(
                       physics: AlwaysScrollableScrollPhysics(),
@@ -162,7 +181,16 @@ class _CalcScreenState extends State<CalcScreen> {
                       itemBuilder: (BuildContext context, int index) {
                         final item = context.read<User>().historylist[index];
                         return Container(
-                          child: Text(""),
+                          margin: EdgeInsets.symmetric(vertical: 10,horizontal: 20),
+                          child: Text("${item.name}: "
+                              "${item.input1} "
+                              "${item.operation} "
+                              "${item.input2} = "
+                              "${item.result}",
+                            style: const TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
                         );
                       },
                     ),
@@ -280,8 +308,44 @@ class _CalcScreenState extends State<CalcScreen> {
                 color: operatorcolor,
                 borderRadius: BorderRadius.circular(10),
               ),
-              child: ListView.builder(
-                itemBuilder: (BuildContext context, int index) {},
+              child: Column(
+                children: [
+                  Container(
+                      alignment: Alignment.center,
+                      margin: EdgeInsets.symmetric(horizontal: 20,vertical: 50),
+                      child: Text(
+                        "Chat:",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: orangecolor,
+                          fontSize: 56,
+                        ),
+                      )
+                  ),
+                  Container(
+                    child: ListView.builder(
+                      physics: AlwaysScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: context.read<User>().chatlist.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        final user=context.read<User>();
+                        final item = user.chatlist[index];
+                        return Container(
+                          margin: EdgeInsets.symmetric(vertical: 10,horizontal: 50),
+                          child: Text("${item.name}: "
+                              "${item.input1} "
+                              "${item.operation} "
+                              "${item.input2} = "
+                              "${item.result}",
+                            style: TextStyle(
+                              color: user.uid==item.id?Colors.blue:Colors.white,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ],
               ),
             ),
           ):SizedBox(),
