@@ -1,4 +1,4 @@
-/*using System.Threading.Tasks;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using calculatorApi.Models;
 using calculatorApi.Services;
@@ -35,4 +35,3 @@ namespace calculatorApi.Controllers
         }
     }
 }
-*/
