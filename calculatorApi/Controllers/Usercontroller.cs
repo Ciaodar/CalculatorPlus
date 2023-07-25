@@ -17,7 +17,7 @@ namespace calculatorApi.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> RegisterUser([FromBody] User user)
+        public async Task<IActionResult> RegisterUser([FromBody] UserModel user)
         {
             if (!ModelState.IsValid)
             {
