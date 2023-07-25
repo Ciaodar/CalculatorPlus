@@ -1,6 +1,6 @@
 const redis = require('redis');
 
-const redisClient = redis.createClient(6379);
+const redisClient = redis.createClient()//6379);
 const Input = require('../models/inputschema');
 
 const updateCache = async (id) => {
