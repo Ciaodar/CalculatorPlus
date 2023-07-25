@@ -9,6 +9,11 @@ const dbrouter = require('./router/dbrouter');
 const Socket = require('./services/Socket');
 
 const app = express();
+console.log("3");
+const redisRout = require('./router/redisrouter');
+
+
+
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
@@ -22,7 +27,9 @@ app.get('/',(req,res)=> {
 } );
 
 app.use('/api',dbrouter);
-//app.use('/api',redisrouter);
+console.log("1");
+app.use('/api',redisRout);          // HATA BURADAN GELİYOR , ROUTER'DA PROBLEM VAR
+console.log("2");
 
 consumer();
 Socket.SocketServer(wss);

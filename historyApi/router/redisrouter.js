@@ -9,4 +9,18 @@
 //     res.json(response);
 // });
 
-// module.exports=router;
+const express = require('express');
+const redisClient = express.Router();
+
+module.exports = (router) => {
+    router.get('../index',async(req,res)=>{
+        res.json({
+            message: 'Redis router calisti.'
+        })
+    })
+}
+module.exports=redisClient;
+
+
+
+
