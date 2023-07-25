@@ -5,7 +5,7 @@ require('./db/dbCon');
 const consumer = require('./services/ConsumerMQ');
 
 const dbrouter = require('./router/dbrouter');
-const redisrouter = require('./router/redisRouter');
+//const redisrouter = require('./router/redisRouter');
 const Socket = require('./services/Socket');
 
 const app = express();
@@ -22,7 +22,7 @@ app.get('/',(req,res)=> {
 } );
 
 app.use('/api',dbrouter);
-app.use('/api',redisrouter);
+//app.use('/api',redisrouter);
 
 consumer();
 Socket.SocketServer(wss);
