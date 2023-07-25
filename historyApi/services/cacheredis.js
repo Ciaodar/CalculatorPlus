@@ -1,10 +1,6 @@
 const redis = require('redis');
 
-const redisClient = redis.createClient({
-  username : "default",
-  password : "AVNS_qF7ktwaXcTDXER13_kB",
-  host : "db-redis-nyc1-26286-do-user-14375429-0.b.db.ondigitalocean.com",
-  port : 25061})//"rediss://default:AVNS_qF7ktwaXcTDXER13_kB@db-redis-nyc1-26286-do-user-14375429-0.b.db.ondigitalocean.com:25061");
+const redisClient = redis.createClient("rediss://default:AVNS_qF7ktwaXcTDXER13_kB@db-redis-nyc1-26286-do-user-14375429-0.b.db.ondigitalocean.com:25061");
 const Input = require('../models/inputschema');
 
 const updateCache = async (id) => {
