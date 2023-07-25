@@ -13,6 +13,7 @@ const SocketServer = (wss)=>{
 }
 function sendCalculationAll(message){
     console.log(message);
+    console.log(ALL_USERS.length);
     for(let i = 0;i<ALL_USERS.length;i++){
         ALL_USERS[i].ws.send(message);
     }
