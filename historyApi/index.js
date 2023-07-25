@@ -28,7 +28,7 @@ app.get('/',(req,res)=> {
 
 app.use('/api',dbrouter);
 console.log("1");
-app.use('/api',redisRout);          // HATA BURADAN GELİYOR , ROUTER'DA PROBLEM VAR
+app.use('/api',redisRout);
 console.log("2");
 
 consumer();
