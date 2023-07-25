@@ -1,3 +1,6 @@
+import 'dart:convert' as convert;
+import 'dart:io';
+import 'package:calculatorplus/Objects/calculation.dart';
 import 'package:flutter/material.dart';
 import 'package:calculatorplus/colors.dart';
 import 'package:provider/provider.dart';
@@ -5,10 +8,10 @@ import '../Providers/User.dart';
 import '../Services/historyChecker.dart';
 import '../Services/calcSender.dart';
 import '../Storage/checkSign.dart';
+import 'package:web_socket_client/web_socket_client.dart';
 
 class CalcScreen extends StatefulWidget {
   const CalcScreen({Key? key}) : super(key: key);
-
   @override
   State<CalcScreen> createState() => _CalcScreenState();
 }
@@ -26,6 +29,11 @@ class _CalcScreenState extends State<CalcScreen> {
   @override
   void initState() {
     checkSign(context);
+
+
+
+
+
     super.initState();
   }
 
@@ -149,56 +157,67 @@ class _CalcScreenState extends State<CalcScreen> {
       body: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          dsize.width > 1280 ?Container(
-            padding: EdgeInsets.all(3),
-            width: dsize.width/3,
-            decoration: BoxDecoration(
-                color: orangecolor, borderRadius: BorderRadius.circular(10)),
-            child: Container(
-              decoration: BoxDecoration(
-                color: operatorcolor,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Column(
-                children: [
-                  Container(
-                    alignment: Alignment.center,
-                    margin: EdgeInsets.symmetric(horizontal: 20,vertical: 50),
-                      child: Text(
-                          "History:",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: orangecolor,
-                          fontSize: 56,
-                        ),
-                      )
-                  ),
-                  Container(
-                    child: ListView.builder(
-                      physics: AlwaysScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      itemCount: context.read<User>().historylist.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        final item = context.read<User>().historylist[index];
-                        return Container(
-                          margin: EdgeInsets.symmetric(vertical: 10,horizontal: 20),
-                          child: Text("${item.name}: "
-                              "${item.input1} "
-                              "${item.operation} "
-                              "${item.input2} = "
-                              "${item.result}",
-                            style: const TextStyle(
-                              color: Colors.white,
+          dsize.width > 1280
+              ? Container(
+                  width: dsize.width / 3,
+                  padding: EdgeInsets.all(10),
+                  child: Container(
+                    padding: const EdgeInsets.all(3),
+                    decoration: BoxDecoration(
+                        color: orangecolor,
+                        borderRadius: BorderRadius.circular(10)),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: operatorcolor,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                              alignment: Alignment.center,
+                              margin: const EdgeInsets.symmetric(
+                                  horizontal: 20, vertical: 50),
+                              child: const Text(
+                                "History:",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: orangecolor,
+                                  fontSize: 56,
+                                ),
+                              )),
+                          Container(
+                            child: ListView.builder(
+                              physics: const AlwaysScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              itemCount:
+                                  context.read<User>().historylist.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                final item =
+                                    context.read<User>().historylist[index];
+                                return Container(
+                                  margin: const EdgeInsets.symmetric(
+                                      vertical: 10, horizontal: 30),
+                                  child: Text(
+                                    "${item.input1} "
+                                    "${item.operation} "
+                                    "${item.input2} = "
+                                    "${item.result}",
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                );
+                              },
                             ),
                           ),
-                        );
-                      },
+                        ],
+                      ),
                     ),
                   ),
-                ],
-              ),
-            ),
-          ):SizedBox(),
+                )
+              : const SizedBox(),
           Container(
             width: dsize.width > 1280
                 ? dsize.width / 3
@@ -294,61 +313,73 @@ class _CalcScreenState extends State<CalcScreen> {
               ],
             ),
           ),
-          dsize.width > 640?Container(
-            padding: EdgeInsets.all(3),
-            width: dsize.width > 1280
-                ? dsize.width / 3
-                : dsize.width > 640
-                    ? dsize.width / 2
-                    : 0,
-            decoration: BoxDecoration(
-                color: orangecolor, borderRadius: BorderRadius.circular(10)),
-            child: Container(
-              decoration: BoxDecoration(
-                color: operatorcolor,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Column(
-                children: [
-                  Container(
-                      alignment: Alignment.center,
-                      margin: EdgeInsets.symmetric(horizontal: 20,vertical: 50),
-                      child: Text(
-                        "Chat:",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: orangecolor,
-                          fontSize: 56,
-                        ),
-                      )
-                  ),
-                  Container(
-                    child: ListView.builder(
-                      physics: AlwaysScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      itemCount: context.read<User>().chatlist.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        final user=context.read<User>();
-                        final item = user.chatlist[index];
-                        return Container(
-                          margin: EdgeInsets.symmetric(vertical: 10,horizontal: 50),
-                          child: Text("${item.name}: "
-                              "${item.input1} "
-                              "${item.operation} "
-                              "${item.input2} = "
-                              "${item.result}",
-                            style: TextStyle(
-                              color: user.uid==item.id?Colors.blue:Colors.white,
+          dsize.width > 640
+              ? Container(
+                  width: dsize.width > 1280
+                      ? dsize.width / 3
+                      : dsize.width > 640
+                          ? dsize.width / 2
+                          : 0,
+                  padding: EdgeInsets.all(10),
+                  child: Container(
+                    padding: const EdgeInsets.all(3),
+                    decoration: BoxDecoration(
+                        color: orangecolor,
+                        borderRadius: BorderRadius.circular(10)),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: operatorcolor,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                              alignment: Alignment.center,
+                              margin: const EdgeInsets.symmetric(
+                                  horizontal: 20, vertical: 30),
+                              child: const Text(
+                                "Chat:",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: orangecolor,
+                                  fontSize: 56,
+                                ),
+                              )),
+                          Container(
+                            child: ListView.builder(
+                              physics: const AlwaysScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              itemCount: context.read<User>().chatlist.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                final user = context.read<User>();
+                                final item = user.chatlist[index];
+                                return Container(
+                                  margin: const EdgeInsets.symmetric(
+                                      vertical: 10, horizontal: 50),
+                                  child: Text(
+                                    "${item.name}: "
+                                    "${item.input1} "
+                                    "${item.operation} "
+                                    "${item.input2} = "
+                                    "${item.result}",
+                                    style: TextStyle(
+                                      color: user.uid == item.id
+                                          ? Colors.blue
+                                          : Colors.white,
+                                    ),
+                                  ),
+                                );
+                              },
                             ),
                           ),
-                        );
-                      },
+                        ],
+                      ),
                     ),
                   ),
-                ],
-              ),
-            ),
-          ):SizedBox(),
+                )
+              : const SizedBox(),
         ],
       ),
     );

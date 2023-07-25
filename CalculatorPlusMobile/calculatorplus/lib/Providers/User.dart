@@ -1,22 +1,42 @@
 import 'package:calculatorplus/Storage/setStorage.dart';
 import 'package:flutter/foundation.dart';
-
+import 'package:web_socket_client/web_socket_client.dart';
+import 'dart:convert' as convert;
 import '../Objects/calculation.dart';
 
 class User with ChangeNotifier {
-  User();
+  final socket =
+  WebSocket(Uri.parse('ws://oyster-app-ufjzj.ondigitalocean.app'));
+  User(){
+    socket.messages.listen((message) {
+      final jason = convert.jsonDecode(message);
+      final id = jason['userId'];
+      final username = jason['username'];
+      final jas2 = convert.jsonDecode(jason['Calculations']);
+      final inp1 = jas2['input1'] as double;
+      final inp2 = jas2['input2'] as double;
+      final res = jas2['result'] as double;
+      final op = jas2['signOperation'] as String;
+      chatlist.add(Calculation(
+          name: username,
+          id: id,
+          input1: inp1,
+          input2: inp2,
+          operation: op,
+          result: res));
+    });
+  }
+
+
+
+
   String? _id;
   String? _name;
   bool _checkedIn=false;
   List<Calculation> historylist=[
-    Calculation('Metehan','dskygfjsdbhvıusd',10, 20, '+', 30,),
-    Calculation('Metehan','dskygfjsdbhvıusd',45, 20, '+', 65),
   ];
 
   List<Calculation> chatlist=[
-    Calculation('Metehan','dskygfjsdbhvıusd',10, 20, '+', 30),
-    Calculation('Burhan','buabsoljafbkbasd',20, 5, '*', 100),
-    Calculation('Serdar','badhfasfkgvasfa',50, 5, '/', 10),
   ];
 
 

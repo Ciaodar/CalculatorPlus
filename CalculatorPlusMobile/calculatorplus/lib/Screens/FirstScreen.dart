@@ -1,3 +1,4 @@
+import 'package:calculatorplus/Services/userSender.dart';
 import 'package:calculatorplus/Storage/setStorage.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
@@ -79,6 +80,7 @@ class FirstScreen extends StatelessWidget {
                   final user = context.read<User>();
                   user.updateUserInfo(uid: id,name: namecontroller.text,checkedIn: true);
                   setStorage(user);
+                  userSender(namecontroller.text, id);
                   Navigator.of(context).pop();
                 }, child: const Text(
                 'K',

@@ -23,7 +23,7 @@ sendToDotNet(double firn,double secn, String op,String id,String name)async{
           }]
         })
     );
-    print(response.body);
+    //print(response.body);
     if(response.statusCode==200){
       print('Calculation request succesfully sent');
     }else{

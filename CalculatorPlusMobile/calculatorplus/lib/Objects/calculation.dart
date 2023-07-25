@@ -4,15 +4,20 @@ class Calculation {
   final double input2;
   final String operation;
   final double result;
-  Calculation(this.id,this.name,this.input1, this.input2, this.operation, this.result);
+  Calculation(
+      {this.id,
+      this.name,
+      required this.input1,
+      required this.input2,
+      required this.operation,
+      required this.result});
 
-  factory Calculation.fromJson(String id, String? name,Map<String, dynamic> json) {
+  factory Calculation.fromJson(Map<String, dynamic> json) {
     return Calculation(
-      id,name,
-      json['input1'] as double,
-      json['input2'] as double,
-      json['operation'] as String,
-      json['result'] as double,
+      input1: json['input1'] as double,
+      input2: json['input2'] as double,
+      operation: json['operation'] as String,
+      result: json['result'] as double,
     );
   }
 /*

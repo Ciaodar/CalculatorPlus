@@ -11,7 +11,7 @@ historyCheck(String? id,BuildContext context)async{
     print(id);
     //final url=Uri.https('king-prawn-app-y7gi7.ondigitalocean.app','/history',{'id':'64b3f50f2b0cd7d0071d33f0'});
     var response = await http.get(
-        Uri.parse('https://king-prawn-app-y7gi7.ondigitalocean.app/history?id=$id'),
+        Uri.parse('https://oyster-app-ufjzj.ondigitalocean.app/api/history?id=$id'),
         headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     });
@@ -22,7 +22,7 @@ historyCheck(String? id,BuildContext context)async{
       String? id=json['userId'];
       String? name=json['username'];
       context.read<User>().historylist =
-          calcobjsjson.map((calcjson) => Calculation.fromJson(id!,name,calcjson)).toList();
+          calcobjsjson.map((calcjson) => Calculation.fromJson(calcjson)).toList();
     }
     else{
       print('Error receiving history. Error code: ${response.statusCode}');
