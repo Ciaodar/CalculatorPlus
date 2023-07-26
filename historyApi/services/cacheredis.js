@@ -1,14 +1,24 @@
+
 const redis = require('redis');
-const url = "rediss://default:AVNS_qF7ktwaXcTDXER13_kB@db-redis-nyc1-26286-do-user-14375429-0.b.db.ondigitalocean.com:25061";
+const url = "redis://default:KFBzAD2VaXaBfWHXZykvg1oIbzOjuyLm@redis-16742.c55.eu-central-1-1.ec2.cloud.redislabs.com:16742";
 const redisClient = redis.createClient({
-    url: url
+  url: "redis://default:KFBzAD2VaXaBfWHXZykvg1oIbzOjuyLm@redis-16742.c55.eu-central-1-1.ec2.cloud.redislabs.com:16742"
 });
 
+// redisClient.on_connect('connect ' , () => {
+//     console.log("Redis'e bağlanıldı . ");
+// })
 
-module.exports = redisClient;
+// redisClient.on_error('error' , (err) => {
+//     console.log("Redis'e bağlanırken hata oluştu." , err);
+// })
+
+
+
 const Input = require('../models/inputschema');
 
 const updateCache = async (id) => {
+  console.log("1");
   const cacheKey = `input_${id}`;
   try {
    const found = await Input.find({userId:id});
@@ -25,6 +35,7 @@ const updateCache = async (id) => {
           console.error(err);
         }
       });
+      console.log("2");
     return (found);
 
   }catch (error) {
@@ -37,16 +48,20 @@ async function getDataFromCache(id) {
   try {
     const cachedData = await new Promise((resolve, reject) => {
     redisClient.get(cacheKey, (err, data) => {
+      console.log("3");
       if (err) reject(err);
         resolve(data);
       });
      });
       if (cachedData !== null) {
+        console.log("4");
        console.log("Data found in cache:", cachedData);
+       
        return cachedData;
       }else {
         const cachingData = await updateCache(id);
         return cachingData;
+        console.log("5");
       }
   }catch (error) {
     console.log("Hata: "+error);
@@ -58,8 +73,10 @@ const invalidateCache = async (id) => {
   try{
     redisClient.del(cacheKey , (err , reply) => {
       if(err) {
+        console.log("6");
         console.error("hata4 "+err);
       } else {
+        console.log("7");
         console.log('Önbellekten veri silindi. ${cacheKey}');
       }
     });
@@ -70,6 +87,7 @@ const invalidateCache = async (id) => {
 };
 
 module.exports = getDataFromCache;
+
 
 
 

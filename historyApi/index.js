@@ -7,12 +7,10 @@ const consumer = require('./services/ConsumerMQ');
 const dbrouter = require('./router/dbrouter');
 //const redisrouter = require('./router/redisRouter');
 const Socket = require('./services/Socket');
-
-const app = express();
-console.log("3");
 const redisRout = require('./router/redisrouter');
+const app = express();
 
-
+const cacheRedis = require('./services/cacheredis');
 
 
 app.use(express.json())
@@ -27,9 +25,10 @@ app.get('/',(req,res)=> {
 } );
 
 app.use('/api',dbrouter);
-console.log("1");
+
 app.use('/api',redisRout);
-console.log("2");
+
 
 consumer();
+cacheRedis.redisClient;
 Socket.SocketServer(wss);
