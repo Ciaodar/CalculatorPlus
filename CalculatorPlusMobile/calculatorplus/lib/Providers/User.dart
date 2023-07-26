@@ -6,24 +6,17 @@ import '../Objects/calculation.dart';
 
 class User with ChangeNotifier {
   final socket =
-  WebSocket(Uri.parse('ws://oyster-app-ufjzj.ondigitalocean.app'));
+  WebSocket(Uri.parse('ws://plankton-app-kqhcg.ondigitalocean.app'));
   User(){
     socket.messages.listen((message) {
       final jason = convert.jsonDecode(message);
       final id = jason['userId'];
       final username = jason['username'];
-      final jas2 = convert.jsonDecode(jason['Calculations']);
-      final inp1 = jas2['input1'] as double;
-      final inp2 = jas2['input2'] as double;
-      final res = jas2['result'] as double;
-      final op = jas2['signOperation'] as String;
-      chatlist.add(Calculation(
-          name: username,
-          id: id,
-          input1: inp1,
-          input2: inp2,
-          operation: op,
-          result: res));
+      List<dynamic> list = jason['Calculations'] as List;
+      chatlist.addAll(list.map((calcjson) =>
+          Calculation.fromJson(id: id, uname: username, json: calcjson)
+      ));
+      print("socket geldi");
     });
   }
 
