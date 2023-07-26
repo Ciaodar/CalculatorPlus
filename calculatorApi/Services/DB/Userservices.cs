@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using calculatorApi.Models;
 using Microsoft.Extensions.Options;
@@ -28,14 +29,14 @@ namespace calculatorApi.Services
                     cmd.Parameters.AddWithValue("username", user.username);
                     cmd.Parameters.AddWithValue("UserId", user.Id);
 
-
                     try
                     {
                         await cmd.ExecuteNonQueryAsync();
                         return user;
                     }
-                    catch
+                    catch (Exception e)
                     {
+                        Console.WriteLine(e);
                         // Kayıt işlemi başarısız olursa burada uygun bir hata işleme yapılabilir.
                         return null;
                     }

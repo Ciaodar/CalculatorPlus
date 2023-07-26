@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using calculatorApi.Models;
@@ -24,14 +25,22 @@ namespace calculatorApi.Controllers
                 return BadRequest(ModelState);
             }
 
-            var result = await _userService.RegisterUserAsync(user);
-
-            if (result == null)
+            try
             {
-                return BadRequest("Kullanıcı kaydı oluşturulamadı.");
-            }
+                var result = await _userService.RegisterUserAsync(user);
 
-            return Ok(result);
+                if (result == null)
+                {
+                    return BadRequest("Kullanıcı kaydı oluşturulamadı.");
+                }
+
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return StatusCode(500, "Sunucu hatası. Lütfen daha sonra tekrar deneyin.");
+            }
         }
     }
 }
