@@ -17,6 +17,7 @@ class User with ChangeNotifier {
           Calculation.fromJson(id: id, uname: username, json: calcjson)
       ));
       print("socket geldi");
+      notifyListeners();
     });
   }
 

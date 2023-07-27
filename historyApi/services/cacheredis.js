@@ -21,7 +21,7 @@ const updateCache = async (id) => {
   console.log("1");
   const cacheKey = `input_${id}`;
   try {
-   const found = await Input.find({userId:id});
+   const found = await Input.find({userId:id},{_id:0,Calculations:1});
     if (!found) {
       return "Veri bulunamadı";
     }
@@ -56,8 +56,8 @@ async function getDataFromCache(id) {
       if (cachedData !== null) {
         console.log("4");
        console.log("Data found in cache:", cachedData);
-       
-       return cachedData;
+       const jason=JSON.parse(cachedData)
+       return jason;
       }else {
         const cachingData = await updateCache(id);
         return cachingData;

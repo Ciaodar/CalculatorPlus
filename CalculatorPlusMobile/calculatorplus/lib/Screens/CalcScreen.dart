@@ -160,7 +160,7 @@ class _CalcScreenState extends State<CalcScreen> {
           dsize.width > 1280
               ? Container(
                   width: dsize.width / 3,
-                  padding: EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
                   child: Container(
                     padding: const EdgeInsets.all(3),
                     decoration: BoxDecoration(
@@ -320,7 +320,7 @@ class _CalcScreenState extends State<CalcScreen> {
                       : dsize.width > 640
                           ? dsize.width / 2
                           : 0,
-                  padding: EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
                   child: Container(
                     padding: const EdgeInsets.all(3),
                     decoration: BoxDecoration(
@@ -351,7 +351,7 @@ class _CalcScreenState extends State<CalcScreen> {
                             child: ListView.builder(
                               physics: const AlwaysScrollableScrollPhysics(),
                               shrinkWrap: true,
-                              itemCount: context.read<User>().chatlist.length,
+                              itemCount: context.watch<User>().chatlist.length,
                               itemBuilder: (BuildContext context, int index) {
                                 final user = context.read<User>();
                                 final item = user.chatlist[index];

@@ -4,7 +4,7 @@ class Calculation {
   final double input1;
   final double input2;
   final String operation;
-  final double result;
+  final double? result;
   Calculation(
       {this.id,
       this.name,
@@ -21,7 +21,7 @@ class Calculation {
       input1: json['input1'] as double,
       input2: json['input2'] as double,
       operation: json['signOperation'] as String,
-      result: json['result'] as double,
+      result: json['result'] as double?,
     );
   }
 /*

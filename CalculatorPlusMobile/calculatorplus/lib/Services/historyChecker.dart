@@ -16,11 +16,15 @@ historyCheck(String? id,BuildContext context)async{
       'Content-Type': 'application/json; charset=UTF-8',
     });
     if(response.statusCode==200) {
-      var json=convert.jsonDecode(response.body);
-      print(json.toString());
-      var calcobjsjson = json['Calculations'] as List;
-      context.read<User>().historylist =
-          calcobjsjson.map((calcjson) => Calculation.fromJson(json: calcjson)).toList();
+      final jason=convert.jsonDecode(response.body);
+      print(jason.toString());
+      List<dynamic> calcobjsjson=[];
+      jason.forEach((key,value){
+        if(key=='Calculations'){
+          calcobjsjson = value as List;
+        }
+      });
+      context.read<User>().historylist.addAll(calcobjsjson.map((calcjson) => Calculation.fromJson(json: calcjson)));
     }
     else{
       print('Error receiving history. Error code: ${response.statusCode}');
