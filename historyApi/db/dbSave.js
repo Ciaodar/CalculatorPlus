@@ -5,7 +5,7 @@ const dbSave = async(data)=>{
     var found = await Input.find({userId:data.userId});
     if(found[0] != null){
         console.log(found);
-        await Input.updateOne({},{$push:{Calculations:data.Calculations[0]}});
+        await Input.updateOne({userId:data.userId},{$push:{Calculations:data.Calculations[0]}});
         return "Başarıyla yeni veri eklendi"
     }else{
         try{

@@ -18,13 +18,9 @@ historyCheck(String? id,BuildContext context)async{
     if(response.statusCode==200) {
       final jason=convert.jsonDecode(response.body);
       print(jason.toString());
-      List<dynamic> calcobjsjson=[];
-      jason.forEach((key,value){
-        if(key=='Calculations'){
-          calcobjsjson = value as List;
-        }
-      });
-      context.read<User>().historylist.addAll(calcobjsjson.map((calcjson) => Calculation.fromJson(json: calcjson)));
+      List<dynamic> calcobjsjson = jason[0]['Calculations'] as List;
+      context.read<User>().historylist=
+          calcobjsjson.map((calcjson) => Calculation.fromJson(json: calcjson)).toList();
     }
     else{
       print('Error receiving history. Error code: ${response.statusCode}');
