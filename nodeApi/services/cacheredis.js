@@ -19,7 +19,7 @@ const updateCache = async (id) => {
     redisClient.multi()    // Son 20 veriyi önbellekte saklar.
       .lpush('recentData', cacheKey)
       .ltrim('recentData', 0, 19)
-      .set(cacheKey, foundJson)
+      .set(cacheKey, foundJson , 'EX' , 120)
       .exec((err) => {
         if (err) {
           console.error(err);
