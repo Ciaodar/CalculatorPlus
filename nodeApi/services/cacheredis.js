@@ -5,16 +5,6 @@ const redisClient = redis.createClient({
   url: "redis://default:KFBzAD2VaXaBfWHXZykvg1oIbzOjuyLm@redis-16742.c55.eu-central-1-1.ec2.cloud.redislabs.com:16742"
 });
 
-// redisClient.on_connect('connect ' , () => {
-//     console.log("Redis'e bağlanıldı . ");
-// })
-
-// redisClient.on_error('error' , (err) => {
-//     console.log("Redis'e bağlanırken hata oluştu." , err);
-// })
-
-
-
 const Input = require('../models/inputschema');
 
 const updateCache = async (id) => {
