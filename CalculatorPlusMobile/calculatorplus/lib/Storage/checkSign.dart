@@ -23,5 +23,14 @@ checkSign(BuildContext context)async{
   if(id==null || name == null){
     Navigator.of(context).pushNamed('/sign');
   }
+  print("id: $id \n Name: $name");
   context.read<User>().updateUserInfo(uid: id,checkedIn: check,name: name);
+}
+
+delSign(BuildContext context)async{
+  FlutterSecureStorage().deleteAll();
+  final user=context.read<User>();
+  user.uid=null;
+  user.name=null;
+  user.checkedIn=false;
 }

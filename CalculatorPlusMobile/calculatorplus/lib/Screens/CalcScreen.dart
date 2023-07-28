@@ -1,6 +1,4 @@
-import 'dart:convert' as convert;
-import 'dart:io';
-import 'package:calculatorplus/Objects/calculation.dart';
+
 import 'package:flutter/material.dart';
 import 'package:calculatorplus/colors.dart';
 import 'package:provider/provider.dart';
@@ -8,7 +6,6 @@ import '../Providers/User.dart';
 import '../Services/historyChecker.dart';
 import '../Services/calcSender.dart';
 import '../Storage/checkSign.dart';
-import 'package:web_socket_client/web_socket_client.dart';
 
 class CalcScreen extends StatefulWidget {
   const CalcScreen({Key? key}) : super(key: key);
@@ -21,18 +18,16 @@ class _CalcScreenState extends State<CalcScreen> {
   double? firstnumber;
   double? secondnumber;
   var input = '';
-  var output = '';
+  String output='';
   var operation = '';
   var hideInput = false;
   var outputSize = 34.0;
 
   @override
   void initState() {
-    checkSign(context);
-
-
-
-
+    if(context.read<User>().uid==null) {
+      checkSign(context);
+    }
 
     super.initState();
   }
@@ -40,14 +35,20 @@ class _CalcScreenState extends State<CalcScreen> {
   @override
   Widget build(BuildContext context) {
 
+    if (context.read<User>().output!=null) {
+      output=context.watch<User>().output!;
+    }
+    else {
+      output='';
+    }
     onButtonClick(value) {
       final user = context.read<User>();
-      if (value == 'AC') {
+      if (value == 'C') {
         firstnumber = null;
         secondnumber = null;
         operation = '';
         input = '';
-        output = '';
+        context.read<User>().output = '';
       } else if (value == 'H') {
         historyCheck(user.uid, context);
       } else if (value == '<') {
@@ -59,22 +60,24 @@ class _CalcScreenState extends State<CalcScreen> {
           }
         }
       } else if (value == '=') {
+        context.read<User>().output=null;
         if (input.isNotEmpty) {
-          List<String> parts = input.split(" "); // Split the string by space
+          List<String> parts = input.split(" ");
 
-          firstnumber =
-              double.parse(parts[0]); // Convert the first part to a double
-          operation = parts[1]; // Get the operation as a String
-          secondnumber =
-              double.parse(parts[2]); // Convert the second part to a double
+
+          if (parts.length==3) {
+            firstnumber =
+                double.parse(parts[0]);
+            operation = parts[1];
+            secondnumber =
+                double.parse(parts[2]);
+          }else{
+            return;
+          }
 
           sendToDotNet(
               firstnumber!, secondnumber!, operation, user.uid!, user.name!);
 
-          if (output.endsWith(".0")) {
-            output = output.substring(0, output.length - 2);
-          }
-          input = output;
           hideInput = true;
           outputSize = 52.0;
         }
@@ -143,14 +146,36 @@ class _CalcScreenState extends State<CalcScreen> {
         ),
         backgroundColor: operatorcolor,
         actions: [
-          Container(
-              margin: const EdgeInsets.only(right: 50),
-              child: IconButton(
-                  onPressed: () {},
-                  icon: const Icon(
-                    Icons.more_vert,
-                    color: orangecolor,
-                  ))),
+          PopupMenuButton(
+            icon: const Icon(Icons.more_vert,color: orangecolor,),
+            onSelected: (value){
+              switch (value){
+                case 'resign':
+                  delSign(context);
+                  print('deleting user.');
+                  Navigator.of(context).pushNamed('/sign');
+                  break;
+                case 'deletechat':
+                  print('deleting the chat messages');
+                  setState(() {
+                    context.read<User>().chatlist.clear();
+                  });
+                  break;
+              }
+
+            },
+            itemBuilder: (BuildContext context2) =>
+            <PopupMenuItem> [
+              const PopupMenuItem(
+                value: 'resign',
+                  child: Text('Resign'),
+              ),
+              const PopupMenuItem(
+                value: 'deletechat',
+                child: Text('Delete Chat'),
+              ),
+            ],
+          ),
         ],
       ),
       backgroundColor: Colors.black,
@@ -178,7 +203,7 @@ class _CalcScreenState extends State<CalcScreen> {
                           Container(
                               alignment: Alignment.center,
                               margin: const EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 50),
+                                  horizontal: 20, vertical: 30),
                               child: const Text(
                                 "History:",
                                 textAlign: TextAlign.center,
@@ -188,28 +213,45 @@ class _CalcScreenState extends State<CalcScreen> {
                                 ),
                               )),
                           Container(
-                            child: ListView.builder(
-                              physics: const AlwaysScrollableScrollPhysics(),
-                              shrinkWrap: true,
-                              itemCount:
-                                  context.read<User>().historylist.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                final item =
-                                    context.read<User>().historylist[index];
-                                return Container(
-                                  margin: const EdgeInsets.symmetric(
-                                      vertical: 10, horizontal: 30),
-                                  child: Text(
-                                    "${item.input1} "
-                                    "${item.operation} "
-                                    "${item.input2} = "
-                                    "${item.result}",
-                                    style: const TextStyle(
-                                      color: Colors.white,
+                            alignment: Alignment.center,
+                            child: SingleChildScrollView(
+                              physics: AlwaysScrollableScrollPhysics(),
+                              child: ListView.builder(
+                                physics: const AlwaysScrollableScrollPhysics(),
+                                shrinkWrap: true,
+                                itemCount:
+                                    context.read<User>().historylist.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  final item =
+                                      context.watch<User>().historylist[index];
+                                  return InkWell(
+                                    splashColor: Colors.white,
+                                    onTap: (){print("object");},
+                                    child: Container(
+                                      padding: EdgeInsets.symmetric(vertical: 10),
+                                      decoration: BoxDecoration(
+                                        color: Colors.black12,
+                                        borderRadius: BorderRadius.circular(15),
+                                      ),
+                                      width: double.infinity,
+                                      alignment: Alignment.center,
+                                      margin: const EdgeInsets.symmetric(
+                                          vertical: 10, horizontal: 50),
+                                      child: Text(
+                                        "${item.input1.toStringAsFixed(0)} "
+                                            "${item.operation} "
+                                            "${item.input2.toStringAsFixed(0)} = "
+                                            "${item.result?.toStringAsFixed(0)}",
+                                        textAlign: TextAlign.center,
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 24,
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                );
-                              },
+                                  );
+                                },
+                              ),
                             ),
                           ),
                         ],
@@ -235,6 +277,16 @@ class _CalcScreenState extends State<CalcScreen> {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Text(
+                          output.endsWith(".0")?output.substring(0,output.length-2):output,
+                          style: TextStyle(
+                            fontSize: outputSize,
+                            color: Colors.white.withOpacity(0.7),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        Text(
                           hideInput ? '' : input,
                           style: const TextStyle(
                             fontSize: 48,
@@ -242,23 +294,13 @@ class _CalcScreenState extends State<CalcScreen> {
                           ),
                         ),
                         const SizedBox(
-                          height: 20,
-                        ),
-                        Text(
-                          output,
-                          style: TextStyle(
-                            fontSize: outputSize,
-                            color: Colors.white.withOpacity(0.7),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 100,
+                          height: 40,
                         )
                       ],
                     )),
                 Row(children: [
                   button(
-                      text: 'AC',
+                      text: 'C',
                       buttonBGcolor: operatorcolor,
                       tColor: orangecolor),
                   button(
@@ -360,10 +402,10 @@ class _CalcScreenState extends State<CalcScreen> {
                                       vertical: 10, horizontal: 50),
                                   child: Text(
                                     "${item.name}: "
-                                    "${item.input1} "
+                                    "${item.input1.toStringAsFixed(0)} "
                                     "${item.operation} "
-                                    "${item.input2} = "
-                                    "${item.result}",
+                                    "${item.input2.toStringAsFixed(0)} = "
+                                    "${item.result?.toStringAsFixed(0)}",
                                     style: TextStyle(
                                       color: user.uid == item.id
                                           ? Colors.blue

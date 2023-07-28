@@ -18,10 +18,10 @@ class Calculation {
     return Calculation(
       name: uname,
       id: id,
-      input1: json['input1'] as double,
-      input2: json['input2'] as double,
+      input1: double.parse(json['input1'].toString()),
+      input2: double.parse(json['input2'].toString()),
       operation: json['signOperation'] as String,
-      result: json['result'] as double?,
+      result: double.parse(json['result'].toString()),
     );
   }
 /*

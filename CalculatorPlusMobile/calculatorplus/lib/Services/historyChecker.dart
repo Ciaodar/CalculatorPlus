@@ -18,9 +18,14 @@ historyCheck(String? id,BuildContext context)async{
     if(response.statusCode==200) {
       final jason=convert.jsonDecode(response.body);
       print(jason.toString());
-      List<dynamic> calcobjsjson = jason[0]['Calculations'] as List;
-      context.read<User>().historylist=
-          calcobjsjson.map((calcjson) => Calculation.fromJson(json: calcjson)).toList();
+      try {
+        List<dynamic> calcobjsjson = jason[0]['Calculations'] as List;
+        context.read<User>().historylist=
+          calcobjsjson.map((calcjson) =>
+              Calculation.fromJson(json: calcjson)).toList();
+      } on RangeError catch (e) {
+        print('No history got back.');
+      }
     }
     else{
       print('Error receiving history. Error code: ${response.statusCode}');

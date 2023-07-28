@@ -17,22 +17,43 @@ class User with ChangeNotifier {
           Calculation.fromJson(id: id, uname: username, json: calcjson)
       ));
       print("socket geldi");
+      updateUserInfo(output: chatlist[chatlist.length-1].result.toString());
       notifyListeners();
     });
   }
 
 
 
-
+  String? _output;
   String? _id;
   String? _name;
   bool _checkedIn=false;
-  List<Calculation> historylist=[
+  List<Calculation> _historylist=[
   ];
 
-  List<Calculation> chatlist=[
+  List<Calculation> _chatlist=[
   ];
 
+
+  String? get output => _output;
+
+  set output(String? value) {
+    _output = value;
+  }
+
+  List<Calculation> get historylist => _historylist;
+
+  set historylist(List<Calculation> value) {
+    _historylist = value;
+    notifyListeners();
+  }
+
+  List<Calculation> get chatlist => _chatlist;
+
+  set chatlist(List<Calculation> value) {
+    _chatlist = value;
+    notifyListeners();
+  }
 
   bool get checkedIn => _checkedIn;
   set checkedIn(bool value) {
@@ -64,7 +85,7 @@ class User with ChangeNotifier {
     notifyListeners();
   }
 
-  void updateUserInfo({String? uid, String? name,bool? checkedIn,List<Calculation>? historylist,List<Calculation>? chatlist}) {
+  void updateUserInfo({String? uid,String? output, String? name,bool? checkedIn,List<Calculation>? historylist,List<Calculation>? chatlist}) {
     if (uid != null) {
       _id = uid;
     }
@@ -80,6 +101,11 @@ class User with ChangeNotifier {
     if (chatlist != null) {
       this.chatlist = chatlist;
     }
+    if (output != null) {
+      this._output = output;
+    }
     notifyListeners();
-  }
+  }//_output
+
+
 }

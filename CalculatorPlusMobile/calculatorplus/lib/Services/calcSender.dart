@@ -17,8 +17,8 @@ sendToDotNet(double firn,double secn, String op,String id,String name)async{
           "userId":id,
           "Calculations":
           [{
-            "input1":firn,
-            "input2":secn,
+            "input1":firn.toInt(),
+            "input2":secn.toInt(),
             "signOperation":op,
           }]
         })
